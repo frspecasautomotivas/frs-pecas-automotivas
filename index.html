@@ -1,0 +1,961 @@
+```html
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FR&S Peças Distribuidora - Soluções em Autopeças</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        frs: {
+                            50: '#fff1f2',
+                            100: '#ffe4e6',
+                            500: '#f43f5e',
+                            600: '#e11d48',
+                            700: '#be123c',
+                            800: '#9f1239',
+                            900: '#881337',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-slate-950 text-slate-100 font-sans min-h-screen flex flex-col selection:bg-frs-500 selection:text-white">
+
+    <!-- PAYMENT INTEGRATION NOTICE BANNER -->
+    <div class="bg-amber-500/10 border-b border-amber-500/30 text-amber-300 text-xs py-2 px-4 text-center font-medium flex items-center justify-center space-x-2">
+        <i class="fa-solid fa-triangle-exclamation text-amber-400 shrink-0"></i>
+        <span><strong>Aviso do Sistema:</strong> Nenhum meio de pagamento está integrado para processamento de pagamentos reais. Os pedidos e cotações são gerados para consulta e finalização via atendimento.</span>
+    </div>
+
+    <!-- TOP BAR -->
+    <div class="bg-slate-900 border-b border-slate-800/80 text-xs text-slate-400 py-2 px-4 hidden sm:block">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <div class="flex items-center space-x-6">
+                <span><i class="fa-solid fa-truck-fast text-frs-500 mr-1.5"></i> Entrega Expressa para Oficinas & Auto Centers</span>
+                <span><i class="fa-solid fa-shield-halved text-frs-500 mr-1.5"></i> Garantia Direta de Fábrica</span>
+            </div>
+            <div class="flex items-center space-x-4">
+                <span class="text-slate-300 font-semibold"><i class="fa-solid fa-building text-frs-500 mr-1"></i> Vendas B2B & Varejo</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN NAVBAR -->
+    <header class="sticky top-0 z-40 bg-slate-900/95 backdrop-blur-md border-b border-slate-800 shadow-xl">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                
+                <!-- Logo -->
+                <div class="flex items-center space-x-3 cursor-pointer" onclick="switchPage('home')">
+                    <div class="bg-gradient-to-tr from-frs-700 to-frs-500 p-2.5 rounded-xl shadow-lg shadow-frs-600/30 flex items-center justify-center">
+                        <i class="fa-solid fa-gears text-white text-2xl"></i>
+                    </div>
+                    <div>
+                        <span class="text-xl sm:text-2xl font-black tracking-tight text-white">FR&S <span class="text-frs-500">PEÇAS</span></span>
+                        <span class="block text-[10px] uppercase tracking-widest text-slate-400 font-bold">Distribuidora Automotiva</span>
+                    </div>
+                </div>
+
+                <!-- Navigation Desktop Links -->
+                <nav class="hidden md:flex items-center space-x-8">
+                    <button onclick="switchPage('home')" id="nav-home" class="nav-link text-sm font-semibold text-frs-500 border-b-2 border-frs-500 py-2 transition">Início</button>
+                    <button onclick="switchPage('catalog')" id="nav-catalog" class="nav-link text-sm font-semibold text-slate-300 hover:text-frs-500 py-2 transition">Catálogo Completo</button>
+                    <button onclick="switchPage('track')" id="nav-track" class="nav-link text-sm font-semibold text-slate-300 hover:text-frs-500 py-2 transition">Rastrear Pedido</button>
+                </nav>
+
+                <!-- Header Actions -->
+                <div class="flex items-center space-x-3 sm:space-x-4">
+                    <button onclick="openCartDrawer()" class="relative bg-slate-800 hover:bg-slate-700/80 border border-slate-700 p-2.5 rounded-xl transition flex items-center space-x-2.5 group">
+                        <i class="fa-solid fa-cart-shopping text-frs-500 text-lg group-hover:scale-110 transition"></i>
+                        <span class="hidden sm:inline text-xs font-bold text-slate-200">Carrinho</span>
+                        <span id="cart-badge" class="bg-frs-600 text-white text-[11px] font-black px-2 py-0.5 rounded-full shadow">0</span>
+                    </button>
+
+                    <!-- Mobile Menu Button -->
+                    <button onclick="toggleMobileMenu()" class="md:hidden bg-slate-800 border border-slate-700 p-2.5 rounded-xl text-slate-300 hover:text-white">
+                        <i class="fa-solid fa-bars text-lg"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Navigation Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-slate-900 border-b border-slate-800 px-4 pt-2 pb-4 space-y-2">
+            <button onclick="switchPage('home'); toggleMobileMenu();" class="block w-full text-left px-3 py-2 rounded-lg text-sm font-bold text-white hover:bg-slate-800">Início</button>
+            <button onclick="switchPage('catalog'); toggleMobileMenu();" class="block w-full text-left px-3 py-2 rounded-lg text-sm font-bold text-slate-300 hover:bg-slate-800">Catálogo Completo</button>
+            <button onclick="switchPage('track'); toggleMobileMenu();" class="block w-full text-left px-3 py-2 rounded-lg text-sm font-bold text-slate-300 hover:bg-slate-800">Rastrear Pedido</button>
+        </div>
+    </header>
+
+    <main class="flex-grow">
+        
+        <!-- PAGE 1: HOME PAGE -->
+        <div id="page-home" class="page-content">
+            
+            <!-- Hero Section -->
+            <section class="relative bg-gradient-to-b from-slate-900 via-slate-900/90 to-slate-950 py-16 sm:py-24 border-b border-slate-800/80 overflow-hidden">
+                <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-frs-900/20 via-transparent to-transparent pointer-events-none"></div>
+                
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                        
+                        <div class="lg:col-span-7 space-y-6 text-center lg:text-left">
+                            <span class="inline-flex items-center space-x-2 bg-frs-500/10 border border-frs-500/30 text-frs-400 text-xs font-bold px-3.5 py-1.5 rounded-full">
+                                <i class="fa-solid fa-certificate"></i>
+                                <span>Distribuidora Oficial Multimarcas</span>
+                            </span>
+
+                            <h1 class="text-3xl sm:text-5xl font-black text-white tracking-tight leading-tight sm:leading-none">
+                                A peça certa que sua oficina precisa, com <span class="text-transparent bg-clip-text bg-gradient-to-r from-frs-500 to-rose-400">agilidade e preço de distribuidora.</span>
+                            </h1>
+
+                            <p class="text-slate-400 text-sm sm:text-base max-w-2xl font-normal leading-relaxed">
+                                Suprindo mecânicas, autocenters e frotistas com mais de 20.000 itens em estoque. Qualidade garantida, peças originais e envio imediato.
+                            </p>
+
+                            <!-- Hero CTA Buttons -->
+                            <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-2">
+                                <button onclick="switchPage('catalog')" class="w-full sm:w-auto bg-gradient-to-r from-frs-600 to-frs-700 hover:from-frs-500 hover:to-frs-600 text-white font-bold px-8 py-4 rounded-xl shadow-xl shadow-frs-600/25 transition flex items-center justify-center space-x-3">
+                                    <span>Explorar Catálogo</span>
+                                    <i class="fa-solid fa-arrow-right"></i>
+                                </button>
+                                <button onclick="openQuickOrderModal()" class="w-full sm:w-auto bg-slate-800 hover:bg-slate-700 border border-slate-700 text-white font-semibold px-6 py-4 rounded-xl transition flex items-center justify-center space-x-2">
+                                    <i class="fa-solid fa-headset text-frs-500"></i>
+                                    <span>Atendimento Rápido</span>
+                                </button>
+                            </div>
+
+                            <!-- Trust Highlights -->
+                            <div class="grid grid-cols-3 gap-4 pt-6 border-t border-slate-800/80 text-center lg:text-left">
+                                <div>
+                                    <h4 class="text-xl sm:text-2xl font-black text-white">+20 mil</h4>
+                                    <p class="text-xs text-slate-400">Itens em Estoque</p>
+                                </div>
+                                <div>
+                                    <h4 class="text-xl sm:text-2xl font-black text-white">100%</h4>
+                                    <p class="text-xs text-slate-400">Peças Testadas</p>
+                                </div>
+                                <div>
+                                    <h4 class="text-xl sm:text-2xl font-black text-white">Express</h4>
+                                    <p class="text-xs text-slate-400">Despacho Rápido</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Hero Banner Image / Card Showcase -->
+                        <div class="lg:col-span-5 flex justify-center">
+                            <div class="relative w-full max-w-md">
+                                <div class="absolute -inset-1 bg-gradient-to-r from-frs-600 to-rose-600 rounded-3xl blur opacity-30"></div>
+                                <div class="relative bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-2xl space-y-5">
+                                    <div class="flex justify-between items-center">
+                                        <span class="text-xs font-bold text-frs-400 tracking-wider uppercase"><i class="fa-solid fa-fire mr-1"></i> Mais Vendidos do Mês</span>
+                                        <span class="bg-emerald-500/10 text-emerald-400 text-[10px] font-bold px-2 py-0.5 rounded border border-emerald-500/20">Em Estoque</span>
+                                    </div>
+                                    
+                                    <div class="aspect-video bg-slate-950 rounded-xl overflow-hidden relative flex items-center justify-center border border-slate-800">
+                                        <img src="https://placehold.co/600x400/1e293b/f43f5e?text=Kit+Freios+Pro" alt="Destaque FR&S" class="object-cover w-full h-full">
+                                        <div class="absolute bottom-3 left-3 bg-slate-900/90 backdrop-blur px-3 py-1 rounded-lg border border-slate-700 text-xs font-bold text-white">
+                                            Linha Freio & Suspensão
+                                        </div>
+                                    </div>
+
+                                    <div class="space-y-1">
+                                        <h3 class="text-base font-bold text-white">Kits Completos para Revisão Profissional</h3>
+                                        <p class="text-xs text-slate-400">Pastilhas, discos, amortecedores e filtros das principais marcas do mercado com garantia estendida.</p>
+                                    </div>
+
+                                    <button onclick="switchPage('catalog')" class="w-full bg-slate-800 hover:bg-frs-600 hover:text-white text-slate-200 text-xs font-bold py-3 rounded-xl border border-slate-700 transition">
+                                        Ver Todas as Promoções
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+
+            <!-- Key Features / Value Propositions -->
+            <section class="py-12 bg-slate-950 border-b border-slate-900">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                        
+                        <div class="bg-slate-900/60 border border-slate-800 p-6 rounded-2xl flex items-start space-x-4">
+                            <div class="bg-frs-600/10 text-frs-500 p-3 rounded-xl border border-frs-500/20 shrink-0">
+                                <i class="fa-solid fa-truck-ramp-box text-xl"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-sm font-bold text-white">Logística Agilizada</h4>
+                                <p class="text-xs text-slate-400 mt-1">Entrega no mesmo dia para regiões metropolitanas.</p>
+                            </div>
+                        </div>
+
+                        <div class="bg-slate-900/60 border border-slate-800 p-6 rounded-2xl flex items-start space-x-4">
+                            <div class="bg-frs-600/10 text-frs-500 p-3 rounded-xl border border-frs-500/20 shrink-0">
+                                <i class="fa-solid fa-file-invoice-dollar text-xl"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-sm font-bold text-white">Faturamento B2B</h4>
+                                <p class="text-xs text-slate-400 mt-1">Condições exclusivas de boleto faturado para oficinas.</p>
+                            </div>
+                        </div>
+
+                        <div class="bg-slate-900/60 border border-slate-800 p-6 rounded-2xl flex items-start space-x-4">
+                            <div class="bg-frs-600/10 text-frs-500 p-3 rounded-xl border border-frs-500/20 shrink-0">
+                                <i class="fa-solid fa-award text-xl"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-sm font-bold text-white">Marcas Líderes</h4>
+                                <p class="text-xs text-slate-400 mt-1">Produtos homologados por montadoras e fabricantes.</p>
+                            </div>
+                        </div>
+
+                        <div class="bg-slate-900/60 border border-slate-800 p-6 rounded-2xl flex items-start space-x-4">
+                            <div class="bg-frs-600/10 text-frs-500 p-3 rounded-xl border border-frs-500/20 shrink-0">
+                                <i class="fa-solid fa-headset text-xl"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-sm font-bold text-white">Suporte Técnico</h4>
+                                <p class="text-xs text-slate-400 mt-1">Especialistas prontos para tirar dúvidas de aplicação.</p>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+
+            <!-- Featured Categories Grid -->
+            <section class="py-16 bg-slate-900/40 border-b border-slate-800/80">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-10 gap-4">
+                        <div>
+                            <span class="text-frs-500 text-xs font-bold uppercase tracking-wider">Nossas Linhas</span>
+                            <h2 class="text-2xl sm:text-3xl font-black text-white mt-1">Categorias em Destaque</h2>
+                        </div>
+                        <button onclick="switchPage('catalog')" class="text-xs font-bold text-frs-400 hover:text-frs-300 flex items-center space-x-1.5">
+                            <span>Ver todas as categorias</span>
+                            <i class="fa-solid fa-chevron-right text-[10px]"></i>
+                        </button>
+                    </div>
+
+                    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 sm:gap-6">
+                        
+                        <div onclick="filterCategoryAndGo('freios')" class="bg-slate-900 hover:bg-slate-800 border border-slate-800 hover:border-frs-500/50 p-6 rounded-2xl cursor-pointer text-center group transition">
+                            <div class="bg-slate-800 group-hover:bg-frs-600/20 w-14 h-14 rounded-2xl mx-auto flex items-center justify-center mb-4 transition">
+                                <i class="fa-solid fa-disc-drive text-2xl text-frs-500 group-hover:scale-110 transition"></i>
+                            </div>
+                            <h3 class="font-bold text-white text-sm">Freios</h3>
+                            <p class="text-[11px] text-slate-400 mt-1">Pastilhas, discos e fluido</p>
+                        </div>
+
+                        <div onclick="filterCategoryAndGo('suspensao')" class="bg-slate-900 hover:bg-slate-800 border border-slate-800 hover:border-frs-500/50 p-6 rounded-2xl cursor-pointer text-center group transition">
+                            <div class="bg-slate-800 group-hover:bg-frs-600/20 w-14 h-14 rounded-2xl mx-auto flex items-center justify-center mb-4 transition">
+                                <i class="fa-solid fa-car-side text-2xl text-frs-500 group-hover:scale-110 transition"></i>
+                            </div>
+                            <h3 class="font-bold text-white text-sm">Suspensão</h3>
+                            <p class="text-[11px] text-slate-400 mt-1">Amortecedores e pivôs</p>
+                        </div>
+
+                        <div onclick="filterCategoryAndGo('motor')" class="bg-slate-900 hover:bg-slate-800 border border-slate-800 hover:border-frs-500/50 p-6 rounded-2xl cursor-pointer text-center group transition">
+                            <div class="bg-slate-800 group-hover:bg-frs-600/20 w-14 h-14 rounded-2xl mx-auto flex items-center justify-center mb-4 transition">
+                                <i class="fa-solid fa-engine text-2xl text-frs-500 group-hover:scale-110 transition"></i>
+                            </div>
+                            <h3 class="font-bold text-white text-sm">Motor</h3>
+                            <p class="text-[11px] text-slate-400 mt-1">Bombas, juntas e correias</p>
+                        </div>
+
+                        <div onclick="filterCategoryAndGo('eletrica')" class="bg-slate-900 hover:bg-slate-800 border border-slate-800 hover:border-frs-500/50 p-6 rounded-2xl cursor-pointer text-center group transition">
+                            <div class="bg-slate-800 group-hover:bg-frs-600/20 w-14 h-14 rounded-2xl mx-auto flex items-center justify-center mb-4 transition">
+                                <i class="fa-solid fa-bolt text-2xl text-frs-500 group-hover:scale-110 transition"></i>
+                            </div>
+                            <h3 class="font-bold text-white text-sm">Elétrica</h3>
+                            <p class="text-[11px] text-slate-400 mt-1">Alternadores e velas</p>
+                        </div>
+
+                        <div onclick="filterCategoryAndGo('filtros')" class="bg-slate-900 hover:bg-slate-800 border border-slate-800 hover:border-frs-500/50 p-6 rounded-2xl cursor-pointer text-center group transition col-span-2 md:col-span-1">
+                            <div class="bg-slate-800 group-hover:bg-frs-600/20 w-14 h-14 rounded-2xl mx-auto flex items-center justify-center mb-4 transition">
+                                <i class="fa-solid fa-filter text-2xl text-frs-500 group-hover:scale-110 transition"></i>
+                            </div>
+                            <h3 class="font-bold text-white text-sm">Filtros & Óleo</h3>
+                            <p class="text-[11px] text-slate-400 mt-1">Kits de revisão completa</p>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+
+            <!-- Home Sample Showcase -->
+            <section class="py-16 bg-slate-950">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="flex justify-between items-center mb-8">
+                        <div>
+                            <h2 class="text-2xl font-black text-white">Destaques em Estoque</h2>
+                            <p class="text-xs text-slate-400 mt-1">Preços especiais e condições exclusivas de lote.</p>
+                        </div>
+                        <button onclick="switchPage('catalog')" class="bg-frs-600/10 border border-frs-500/30 text-frs-400 hover:bg-frs-600 hover:text-white px-4 py-2 rounded-xl text-xs font-bold transition">
+                            Ver Todos
+                        </button>
+                    </div>
+
+                    <div id="home-featured-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                        <!-- Filled by JavaScript -->
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- PAGE 2: FULL CATALOG PAGE -->
+        <div id="page-catalog" class="page-content hidden">
+            <section class="py-10 bg-slate-950">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    
+                    <!-- Page Header Banner -->
+                    <div class="mb-8 bg-slate-900 border border-slate-800 p-6 sm:p-8 rounded-3xl flex flex-col md:flex-row md:items-center justify-between gap-6">
+                        <div>
+                            <span class="text-frs-500 text-xs font-bold uppercase tracking-widest">Estoque Atualizado</span>
+                            <h1 class="text-2xl sm:text-4xl font-black text-white mt-1">Catálogo de Autopeças</h1>
+                            <p class="text-slate-400 text-xs sm:text-sm mt-2 max-w-xl">Consulte preços, disponibilidade e envie suas solicitações de pedido diretamente para nossa central de suprimentos.</p>
+                        </div>
+                        <div class="bg-slate-950 border border-slate-800 px-5 py-3 rounded-2xl flex items-center space-x-3 w-fit shrink-0">
+                            <i class="fa-solid fa-boxes-stacked text-frs-500 text-xl"></i>
+                            <div>
+                                <span class="block text-xs font-bold text-white" id="total-items-badge">8 Peças Encontradas</span>
+                                <span class="block text-[10px] text-slate-400">Preços de Distribuição B2B</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Search and Filter Bar -->
+                    <div class="bg-slate-900/90 border border-slate-800 p-4 sm:p-6 rounded-2xl shadow-xl mb-8 flex flex-col lg:flex-row gap-4 items-center justify-between sticky top-24 z-30 backdrop-blur-md">
+                        <!-- Search Input -->
+                        <div class="relative w-full lg:w-96">
+                            <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                            <input type="text" id="catalog-search" oninput="filterCatalog()" placeholder="Ex: Pastilha, Amortecedor, Bosch, FR-9201..." class="w-full bg-slate-950 border border-slate-700/80 rounded-xl pl-11 pr-4 py-3 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-frs-500 transition">
+                        </div>
+
+                        <!-- Category Filter Buttons -->
+                        <div id="category-filter-buttons" class="flex items-center gap-2 overflow-x-auto w-full lg:w-auto pb-2 lg:pb-0 scrollbar-none">
+                            <button onclick="setCategoryFilter('all')" class="cat-btn px-4 py-2.5 rounded-xl text-xs font-bold whitespace-nowrap transition bg-frs-600 text-white shadow" data-cat="all">Todas as Peças</button>
+                            <button onclick="setCategoryFilter('motor')" class="cat-btn px-4 py-2.5 rounded-xl text-xs font-bold whitespace-nowrap transition bg-slate-950 border border-slate-800 text-slate-300 hover:bg-slate-800" data-cat="motor">Motor</button>
+                            <button onclick="setCategoryFilter('suspensao')" class="cat-btn px-4 py-2.5 rounded-xl text-xs font-bold whitespace-nowrap transition bg-slate-950 border border-slate-800 text-slate-300 hover:bg-slate-800" data-cat="suspensao">Suspensão</button>
+                            <button onclick="setCategoryFilter('freios')" class="cat-btn px-4 py-2.5 rounded-xl text-xs font-bold whitespace-nowrap transition bg-slate-950 border border-slate-800 text-slate-300 hover:bg-slate-800" data-cat="freios">Freios</button>
+                            <button onclick="setCategoryFilter('eletrica')" class="cat-btn px-4 py-2.5 rounded-xl text-xs font-bold whitespace-nowrap transition bg-slate-950 border border-slate-800 text-slate-300 hover:bg-slate-800" data-cat="eletrica">Elétrica</button>
+                            <button onclick="setCategoryFilter('filtros')" class="cat-btn px-4 py-2.5 rounded-xl text-xs font-bold whitespace-nowrap transition bg-slate-950 border border-slate-800 text-slate-300 hover:bg-slate-800" data-cat="filtros">Filtros & Óleo</button>
+                        </div>
+                    </div>
+
+                    <!-- Products Grid -->
+                    <div id="catalog-products-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                        <!-- Filled by JS -->
+                    </div>
+
+                    <!-- Empty State -->
+                    <div id="no-results" class="hidden text-center py-20 bg-slate-900/50 border border-slate-800 rounded-3xl">
+                        <i class="fa-solid fa-box-open text-6xl text-slate-700 mb-4"></i>
+                        <h3 class="text-xl font-bold text-slate-200">Nenhuma peça localizada</h3>
+                        <p class="text-slate-400 text-sm mt-1 max-w-sm mx-auto">Tente utilizar um código genérico ou verifique se digitou o termo corretamente.</p>
+                        <button onclick="resetFilters()" class="mt-6 bg-slate-800 hover:bg-slate-700 border border-slate-700 text-white px-5 py-2.5 rounded-xl text-xs font-bold transition">Limpar Busca e Filtros</button>
+                    </div>
+
+                </div>
+            </section>
+        </div>
+
+        <!-- PAGE 3: TRACK ORDER PAGE -->
+        <div id="page-track" class="page-content hidden">
+            <section class="py-16 bg-slate-950">
+                <div class="max-w-3xl mx-auto px-4">
+                    <div class="text-center mb-10 space-y-2">
+                        <div class="inline-flex bg-frs-500/10 text-frs-400 p-3 rounded-2xl border border-frs-500/20 mb-2">
+                            <i class="fa-solid fa-truck-fast text-2xl"></i>
+                        </div>
+                        <h1 class="text-3xl font-black text-white">Acompanhar Pedido</h1>
+                        <p class="text-slate-400 text-sm">Digite o número do seu pedido ou CNPJ/CPF da empresa para verificar o status.</p>
+                    </div>
+
+                    <div class="bg-slate-900 border border-slate-800 p-6 sm:p-8 rounded-3xl shadow-2xl space-y-6">
+                        <div class="space-y-2">
+                            <label class="text-xs font-bold text-slate-300">Código do Pedido ou Documento</label>
+                            <div class="flex flex-col sm:flex-row gap-3">
+                                <input type="text" id="track-input" placeholder="Ex: FRS-8832 ou 12.345.678/0001-90" class="flex-grow bg-slate-950 border border-slate-700 rounded-xl px-4 py-3 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-frs-500">
+                                <button onclick="searchOrderTrack()" class="bg-frs-600 hover:bg-frs-700 text-white font-bold px-6 py-3 rounded-xl text-sm transition">
+                                    Rastrear
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Track Result Simulated Container -->
+                        <div id="track-results" class="hidden pt-6 border-t border-slate-800 space-y-6">
+                            <div class="flex justify-between items-center bg-slate-950 p-4 rounded-xl border border-slate-800">
+                                <div>
+                                    <span class="text-[10px] uppercase text-slate-400 font-bold block">Status Atual</span>
+                                    <span class="text-sm font-bold text-emerald-400"><i class="fa-solid fa-circle-check mr-1"></i> Pedido em Separação / Expedição</span>
+                                </div>
+                                <span class="bg-slate-800 text-slate-300 text-xs px-3 py-1 rounded-lg font-mono">FRS-8832</span>
+                            </div>
+
+                            <div class="space-y-4">
+                                <div class="flex items-center space-x-4">
+                                    <div class="w-8 h-8 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-xs font-bold">1</div>
+                                    <div class="text-xs">
+                                        <h5 class="font-bold text-white">Pedido Aprovado e Faturado</h5>
+                                        <p class="text-slate-400">Hoje às 09:30 - Nota Fiscal gerada com sucesso</p>
+                                    </div>
+                                </div>
+
+                                <div class="flex items-center space-x-4">
+                                    <div class="w-8 h-8 rounded-full bg-frs-500/20 text-frs-400 flex items-center justify-center text-xs font-bold">2</div>
+                                    <div class="text-xs">
+                                        <h5 class="font-bold text-white">Coleta e Separação de Peças</h5>
+                                        <p class="text-slate-400">Em andamento pelo centro de distribuição</p>
+                                    </div>
+                                </div>
+
+                                <div class="flex items-center space-x-4 opacity-50">
+                                    <div class="w-8 h-8 rounded-full bg-slate-800 text-slate-400 flex items-center justify-center text-xs font-bold">3</div>
+                                    <div class="text-xs">
+                                        <h5 class="font-bold text-slate-300">Saiu para Entrega Expressa</h5>
+                                        <p class="text-slate-500">Aguardando saída do veículo</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+        </div>
+
+    </main>
+
+    <!-- SLIDE-OVER CART & CHECKOUT DRAWER -->
+    <div id="cart-drawer" class="fixed inset-0 z-50 overflow-hidden hidden">
+        <!-- Backdrop -->
+        <div class="absolute inset-0 bg-slate-950/80 backdrop-blur-sm transition-opacity" onclick="closeCartDrawer()"></div>
+
+        <div class="absolute inset-y-0 right-0 max-w-full flex pl-10">
+            <div class="w-screen max-w-md bg-slate-900 border-l border-slate-800 flex flex-col shadow-2xl">
+                <!-- Cart Header -->
+                <div class="p-6 border-b border-slate-800 flex items-center justify-between">
+                    <div class="flex items-center space-x-3">
+                        <div class="bg-frs-600/20 text-frs-500 p-2.5 rounded-xl">
+                            <i class="fa-solid fa-cart-shopping text-xl"></i>
+                        </div>
+                        <div>
+                            <h2 class="text-lg font-bold text-white">Seu Pedido</h2>
+                            <p id="cart-item-count-text" class="text-xs text-slate-400">0 itens selecionados</p>
+                        </div>
+                    </div>
+                    <button onclick="closeCartDrawer()" class="text-slate-400 hover:text-white p-2 rounded-lg bg-slate-800 hover:bg-slate-700 transition">
+                        <i class="fa-solid fa-xmark text-lg"></i>
+                    </button>
+                </div>
+
+                <!-- Cart Body Items -->
+                <div id="cart-items-container" class="flex-grow overflow-y-auto p-6 space-y-4 divide-y divide-slate-800/60">
+                    <!-- Filled by JS -->
+                </div>
+
+                <!-- Cart Empty State -->
+                <div id="cart-empty-state" class="hidden flex-grow flex flex-col items-center justify-center p-8 text-center">
+                    <i class="fa-solid fa-cart-plus text-5xl text-slate-700 mb-3"></i>
+                <!-- Cart Footer & Checkout Section -->
+                <div id="cart-footer-section" class="border-t border-slate-800 p-6 bg-slate-900/90 space-y-4">
+                    
+                    <div class="bg-amber-500/10 border border-amber-500/30 rounded-xl p-3 flex items-start space-x-2.5 text-[11px] text-amber-300">
+                        <i class="fa-solid fa-circle-info text-amber-400 mt-0.5 shrink-0"></i>
+                        <span>Este ambiente não processa cobranças diretas ou transações bancárias. Seu pedido será enviado como cotação direta no WhatsApp.</span>
+                    </div>
+
+                    <!-- Customer Info Form inside Drawer -->
+                    <div class="space-y-3">
+                        <h3 class="text-xs font-bold text-slate-300 uppercase tracking-wider">Dados para Faturamento</h3>
+                        <div>
+                            <input type="text" id="checkout-name" placeholder="Nome da Oficina / CNPJ ou Razão Social" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-frs-500">
+                        </div>
+                        <div class="grid grid-cols-2 gap-2">
+                            <input type="text" id="checkout-phone" placeholder="WhatsApp Contato" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-frs-500">
+                            <select id="checkout-payment" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2.5 text-xs text-white focus:outline-none focus:border-frs-500">
+                                <option value="Boleto Faturado (B2B)">Boleto Faturado</option>
+                                <option value="Pix (5% Desconto)">Pix</option>
+                                <option value="Cartão de Crédito">Cartão de Crédito</option>
+                                <option value="Dinheiro / Balcão">Dinheiro / Balcão</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Totals -->
+                    <div class="space-y-1.5 pt-2 border-t border-slate-800/80">
+                        <div class="flex justify-between text-xs text-slate-400">
+                            <span>Subtotal</span>
+                            <span id="cart-subtotal">R$ 0,00</span>
+                        </div>
+                        <div class="flex justify-between text-xs text-slate-400">
+                            <span>Frete Express Oficina</span>
+                            <span class="text-emerald-400 font-bold">Grátis</span>
+                        </div>
+                        <div class="flex justify-between text-base font-bold text-white pt-1">
+                            <span>Total Estimado</span>
+                            <span id="cart-total" class="text-frs-500">R$ 0,00</span>
+                        </div>
+                    </div>
+
+                    <!-- Submit Order Buttons -->
+                    <div class="space-y-2 pt-2">
+                        <button onclick="submitOrderWhatsApp()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3.5 px-4 rounded-xl text-sm transition shadow-lg shadow-emerald-600/20 flex items-center justify-center space-x-2">
+                            <i class="fa-brands fa-whatsapp text-lg"></i>
+                            <span>Enviar Cotacao / Pedido via WhatsApp</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- QUICK ORDER / SUPPORT MODAL -->
+    <div id="quick-order-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm hidden">
+        <div class="bg-slate-900 border border-slate-800 w-full max-w-md rounded-3xl p-6 shadow-2xl relative space-y-4">
+            <button onclick="closeQuickOrderModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white p-2">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+            <div class="flex items-center space-x-3">
+                <div class="bg-frs-500/20 text-frs-500 p-3 rounded-2xl">
+                    <i class="fa-solid fa-headset text-xl"></i>
+                </div>
+                <div>
+                    <h3 class="text-base font-bold text-white">Atendimento Imediato</h3>
+                    <p class="text-xs text-slate-400">Fale direto com nosso balcão de vendas</p>
+                </div>
+            </div>
+            <p class="text-xs text-slate-300 leading-relaxed">Precisa de suporte para achar um código específico de montadora ou cotação personalizada de lote?</p>
+            <div class="space-y-2 pt-2">
+                <a href="https://wa.me/5511999999999?text=Olá,%20gostaria%20de%20fazer%20uma%20cotação%20de%20peças" target="_blank" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 px-4 rounded-xl text-xs transition flex items-center justify-center space-x-2">
+                    <i class="fa-brands fa-whatsapp text-base"></i>
+                    <span>Chamar Vendedor no WhatsApp</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="bg-slate-950 border-t border-slate-800/80 py-10 mt-auto">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 gap-4">
+                <div class="flex items-center space-x-3">
+                    <div class="bg-slate-900 border border-slate-800 p-2 rounded-xl text-frs-500">
+                        <i class="fa-solid fa-gears text-lg"></i>
+                    </div>
+                    <div>
+                        <span class="font-bold text-slate-200 block text-sm">FR&S Peças Distribuidora</span>
+                        <span class="text-[11px] text-slate-500">Soluções completas para reparação automotiva</span>
+                    </div>
+                </div>
+                <p class="text-center sm:text-right">&copy; 2026 FR&S Peças Distribuidora Ltda. Todos os direitos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Notification Toast Modal/Box -->
+    <div id="toast-notification" class="fixed bottom-6 right-6 z-50 transform translate-y-32 opacity-0 transition-all duration-300 bg-slate-900 border border-slate-700 text-white px-5 py-3.5 rounded-2xl shadow-2xl flex items-center space-x-3">
+        <div id="toast-icon" class="text-emerald-400 text-lg">
+            <i class="fa-solid fa-circle-check"></i>
+        </div>
+        <div>
+            <h5 id="toast-title" class="text-xs font-bold">Sucesso</h5>
+            <p id="toast-message" class="text-[11px] text-slate-300">Ação realizada com sucesso.</p>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT APP LOGIC -->
+    <script>
+        // --- DATABASE DE PEÇAS ---
+        const productsData = [
+            {
+                id: 1,
+                name: "Kit Pastilhas de Freio Dianteiro Cerâmica",
+                category: "freios",
+                brand: "Bosch / FR&S",
+                code: "FR-9201",
+                price: 189.90,
+                featured: true,
+                image: "https://placehold.co/400x300/1e293b/f43f5e?text=Pastilhas+de+Freio",
+                desc: "Alta durabilidade, frenagem precisa sem chiados. Compatível com linha VW, Chevrolet e Fiat."
+            },
+            {
+                id: 2,
+                name: "Amortecedor Dianteiro Pressurized",
+                category: "suspensao",
+                brand: "Monroe / FR&S",
+                code: "FR-4420",
+                price: 320.00,
+                featured: true,
+                image: "https://placehold.co/400x300/1e293b/f43f5e?text=Amortecedor",
+                desc: "Amortecedor pressurizado de alta performance para estabilidade e conforto em qualquer terreno."
+            },
+            {
+                id: 3,
+                name: "Bomba de Óleo do Motor Reforçada",
+                category: "motor",
+                brand: "Schadek / FR&S",
+                code: "FR-1105",
+                price: 245.50,
+                featured: true,
+                image: "https://placehold.co/400x300/1e293b/f43f5e?text=Bomba+de+Oleo",
+                desc: "Garante fluxo de lubrificação ideal sob alta rotação e temperatura para motores modernos."
+            },
+            {
+                id: 4,
+                name: "Alternador Automotivo 90A 12V",
+                category: "eletrica",
+                brand: "Valeo / FR&S",
+                code: "FR-7789",
+                price: 680.00,
+                featured: true,
+                image: "https://placehold.co/400x300/1e293b/f43f5e?text=Alternador",
+                desc: "Alta capacidade de carga e durabilidade contra sobrecargas elétricas. Rotor testado em bancada."
+            },
+            {
+                id: 5,
+                name: "Kit Filtros (Óleo + Ar + Combustível)",
+                category: "filtros",
+                brand: "Mann Filter / FR&S",
+                code: "FR-3302",
+                price: 98.00,
+                featured: false,
+                image: "https://placehold.co/400x300/1e293b/f43f5e?text=Kit+Filtros",
+                desc: "Kit completo para revisão periódica com filtragem superior de impurezas."
+            },
+            {
+                id: 6,
+                name: "Jogo de Velas de Ignição Iridium",
+                category: "eletrica",
+                brand: "NGK / FR&S",
+                code: "FR-6512",
+                price: 150.00,
+                featured: false,
+                image: "https://placehold.co/400x300/1e293b/f43f5e?text=Velas+Iridium",
+                desc: "Melhor queima de combustível, partida a frio facilitada e economia comprovada."
+            },
+            {
+                id: 7,
+                name: "Disco de Freio Ventilado Par",
+                category: "freios",
+                brand: "Fras-le / FR&S",
+                code: "FR-9250",
+                price: 289.00,
+                featured: false,
+                image: "https://placehold.co/400x300/1e293b/f43f5e?text=Disco+de+Freio",
+                desc: "Usinagem de precisão com alta dissipação térmica para evitar fadiga no pedal."
+            },
+            {
+                id: 8,
+                name: "Junta do Cabeçote em Aço Multicamadas",
+                category: "motor",
+                brand: "Taranto / FR&S",
+                code: "FR-1402",
+                price: 135.00,
+                featured: false,
+                image: "https://placehold.co/400x300/1e293b/f43f5e?text=Junta+Cabecote",
+                desc: "Vedação máxima para altas taxas de compressão e motores preparados."
+            }
+        ];
+
+        // App state
+        let cart = [];
+        let currentCategory = 'all';
+
+        // --- APP INITIALIZATION ---
+        window.onload = function() {
+            renderHomeFeatured();
+            renderCatalogProducts();
+            updateCartUI();
+        };
+
+        // --- NAVIGATION BETWEEN PAGES ---
+        function switchPage(pageId) {
+            document.querySelectorAll('.page-content').forEach(p => p.classList.add('hidden'));
+            
+            const target = document.getElementById(`page-${pageId}`);
+            if(target) target.classList.remove('hidden');
+
+            // Update nav active links
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('text-frs-500', 'border-b-2', 'border-frs-500');
+                link.classList.add('text-slate-300');
+            });
+
+            const activeBtn = document.getElementById(`nav-${pageId}`);
+            if(activeBtn) {
+                activeBtn.classList.add('text-frs-500', 'border-b-2', 'border-frs-500');
+                activeBtn.classList.remove('text-slate-300');
+            }
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            if(menu) menu.classList.toggle('hidden');
+        }
+
+        function filterCategoryAndGo(category) {
+            setCategoryFilter(category);
+            switchPage('catalog');
+        }
+
+        // --- RENDER HOME FEATURED ---
+        function renderHomeFeatured() {
+            const container = document.getElementById('home-featured-grid');
+            if(!container) return;
+
+            const featured = productsData.filter(p => p.featured);
+            container.innerHTML = featured.map(prod => createProductCardHTML(prod)).join('');
+        }
+
+        // --- RENDER CATALOG ---
+        function renderCatalogProducts() {
+            const container = document.getElementById('catalog-products-grid');
+            const noResults = document.getElementById('no-results');
+            const totalBadge = document.getElementById('total-items-badge');
+            if(!container) return;
+
+            const searchInput = document.getElementById('catalog-search');
+            const query = searchInput ? searchInput.value.toLowerCase() : '';
+
+            const filtered = productsData.filter(prod => {
+                const matchCat = currentCategory === 'all' || prod.category === currentCategory;
+                const matchSearch = prod.name.toLowerCase().includes(query) || prod.code.toLowerCase().includes(query) || prod.brand.toLowerCase().includes(query);
+                return matchCat && matchSearch;
+            });
+
+            if(totalBadge) totalBadge.innerText = `${filtered.length} Peça(s) Encontrada(s)`;
+
+            if(filtered.length === 0) {
+                container.innerHTML = '';
+                if(noResults) noResults.classList.remove('hidden');
+                return;
+            }
+
+            if(noResults) noResults.classList.add('hidden');
+            container.innerHTML = filtered.map(prod => createProductCardHTML(prod)).join('');
+        }
+
+        function createProductCardHTML(prod) {
+            return `
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-xl flex flex-col justify-between transition hover:border-frs-500/50 group">
+                    <div>
+                        <div class="relative h-48 bg-slate-950 overflow-hidden">
+                            <img src="${prod.image}" alt="${prod.name}" class="w-full h-full object-cover group-hover:scale-105 transition duration-300" onerror="this.src='https://placehold.co/400x300/1e293b/f43f5e?text=Peca+FR&S'">
+                            <span class="absolute top-3 left-3 bg-slate-900/90 backdrop-blur text-xs font-semibold text-frs-400 px-3 py-1 rounded-lg border border-slate-700">${prod.brand}</span>
+                            <span class="absolute top-3 right-3 bg-slate-900/90 backdrop-blur text-[10px] font-mono text-slate-300 px-2 py-1 rounded-md border border-slate-700">${prod.code}</span>
+                        </div>
+                        <div class="p-5 space-y-2">
+                            <h3 class="font-bold text-white text-sm sm:text-base line-clamp-1 group-hover:text-frs-400 transition">${prod.name}</h3>
+                            <p class="text-xs text-slate-400 line-clamp-2 leading-relaxed">${prod.desc}</p>
+                        </div>
+                    </div>
+                    <div class="p-5 pt-0 flex items-center justify-between mt-4">
+                        <div>
+                            <span class="text-[10px] text-slate-400 block">Preço Distribuição</span>
+                            <span class="text-lg font-black text-frs-500">R$ ${prod.price.toFixed(2).replace('.', ',')}</span>
+                        </div>
+                        <button onclick="addToCart(${prod.id})" class="bg-frs-600 hover:bg-frs-700 text-white p-3 rounded-xl transition shadow-md shadow-frs-600/30 flex items-center justify-center">
+                            <i class="fa-solid fa-cart-plus text-sm"></i>
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function setCategoryFilter(cat) {
+            currentCategory = cat;
+            document.querySelectorAll('.cat-btn').forEach(btn => {
+                if(btn.getAttribute('data-cat') === cat) {
+                    btn.classList.add('bg-frs-600', 'text-white', 'shadow');
+                    btn.classList.remove('bg-slate-950', 'border', 'border-slate-800', 'text-slate-300');
+                } else {
+                    btn.classList.remove('bg-frs-600', 'text-white', 'shadow');
+                    btn.classList.add('bg-slate-950', 'border', 'border-slate-800', 'text-slate-300');
+                }
+            });
+            renderCatalogProducts();
+        }
+
+        function filterCatalog() {
+            renderCatalogProducts();
+        }
+
+        function resetFilters() {
+            const searchInput = document.getElementById('catalog-search');
+            if(searchInput) searchInput.value = '';
+            setCategoryFilter('all');
+        }
+
+        // --- CART MANAGEMENT ---
+        function openCartDrawer() {
+            document.getElementById('cart-drawer').classList.remove('hidden');
+            renderCartItems();
+        }
+
+        function closeCartDrawer() {
+            document.getElementById('cart-drawer').classList.add('hidden');
+        }
+
+        function openQuickOrderModal() {
+            document.getElementById('quick-order-modal').classList.remove('hidden');
+        }
+
+        function closeQuickOrderModal() {
+            document.getElementById('quick-order-modal').classList.add('hidden');
+        }
+
+        function addToCart(productId) {
+            const product = productsData.find(p => p.id === productId);
+            if(!product) return;
+
+            const existing = cart.find(item => item.id === productId);
+            if(existing) {
+                existing.qty += 1;
+            } else {
+                cart.push({ ...product, qty: 1 });
+            }
+
+            updateCartUI();
+            showToast('Peça Adicionada', `${product.name} foi adicionada ao seu pedido.`);
+        }
+
+        function updateQuantity(productId, delta) {
+            const item = cart.find(i => i.id === productId);
+            if(!item) return;
+            item.qty += delta;
+            if(item.qty <= 0) {
+                cart = cart.filter(i => i.id !== productId);
+            }
+            updateCartUI();
+        }
+
+        function updateCartUI() {
+            const badge = document.getElementById('cart-badge');
+            const countText = document.getElementById('cart-item-count-text');
+            const totalItems = cart.reduce((sum, item) => sum + item.qty, 0);
+
+            if(badge) badge.innerText = totalItems;
+            if(countText) countText.innerText = `${totalItems} itens selecionados`;
+
+            renderCartItems();
+        }
+
+        function renderCartItems() {
+            const container = document.getElementById('cart-items-container');
+            const emptyState = document.getElementById('cart-empty-state');
+            const footerSection = document.getElementById('cart-footer-section');
+
+            if(!container) return;
+
+            if(cart.length === 0) {
+                container.innerHTML = '';
+                container.classList.add('hidden');
+                if(emptyState) emptyState.classList.remove('hidden');
+                if(footerSection) footerSection.classList.add('hidden');
+                return;
+            }
+
+            if(emptyState) emptyState.classList.add('hidden');
+            container.classList.remove('hidden');
+            if(footerSection) footerSection.classList.remove('hidden');
+
+            container.innerHTML = cart.map(item => `
+                <div class="flex items-center justify-between py-3">
+                    <div class="flex items-center space-x-3">
+                        <img src="${item.image}" alt="${item.name}" class="w-12 h-12 rounded-xl object-cover bg-slate-950 border border-slate-800">
+                        <div>
+                            <h4 class="text-xs font-bold text-white line-clamp-1">${item.name}</h4>
+                            <span class="text-[10px] text-frs-500 font-semibold">R$ ${item.price.toFixed(2).replace('.', ',')} un</span>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <button onclick="updateQuantity(${item.id}, -1)" class="w-7 h-7 bg-slate-800 hover:bg-slate-700 rounded-lg text-slate-300 text-xs flex items-center justify-center">-</button>
+                        <span class="text-xs font-bold text-white w-5 text-center">${item.qty}</span>
+                        <button onclick="updateQuantity(${item.id}, 1)" class="w-7 h-7 bg-slate-800 hover:bg-slate-700 rounded-lg text-slate-300 text-xs flex items-center justify-center">+</button>
+                    </div>
+                </div>
+            `).join('');
+
+            // Calculate totals
+            const subtotal = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+            document.getElementById('cart-subtotal').innerText = `R$ ${subtotal.toFixed(2).replace('.', ',')}`;
+            document.getElementById('cart-total').innerText = `R$ ${subtotal.toFixed(2).replace('.', ',')}`;
+        }
+
+        // --- CHECKOUT & ORDER SUBMISSION ---
+        function submitOrderWhatsApp() {
+            if(cart.length === 0) {
+                showToast('Carrinho Vazio', 'Adicione peças antes de finalizar o pedido.', 'error');
+                return;
+            }
+
+            const name = document.getElementById('checkout-name').value.trim();
+            const phone = document.getElementById('checkout-phone').value.trim();
+            const payment = document.getElementById('checkout-payment').value;
+
+            if(!name || !phone) {
+                showToast('Dados Incompletos', 'Por favor, informe seu Nome/Oficina e WhatsApp.', 'error');
+                return;
+            }
+
+            const subtotal = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+            let message = `*NOVO PEDIDO - FR&S PEÇAS DISTRIBUIDORA*%0A%0A`;
+            message += `*Cliente / Razão Social:* ${name}%0A`;
+            message += `*WhatsApp:* ${phone}%0A`;
+            message += `*Forma de Faturamento:* ${payment}%0A%0A`;
+            message += `*Itens do Pedido:*%0A`;
+            
+            cart.forEach((item, index) => {
+                message += `${index + 1}. ${item.name} (${item.code}) - ${item.qty}x - R$ ${(item.price * item.qty).toFixed(2)}%0A`;
+            });
+
+            message += `%0A*Total Geral Estimado: R$ ${subtotal.toFixed(2)}*%0A%0A_Aguardando confirmação de entrega e emissão da NF._`;
+
+            const whatsappUrl = `https://wa.me/5511999999999?text=${message}`;
+            window.open(whatsappUrl, '_blank');
+        }
+
+        function searchOrderTrack() {
+            const input = document.getElementById('track-input').value.trim();
+            if(!input) {
+                showToast('Atenção', 'Informe o código do pedido para rastrear.', 'error');
+                return;
+            }
+            document.getElementById('track-results').classList.remove('hidden');
+        }
+
+        // --- TOAST NOTIFICATION ---
+        function showToast(title, message) {
+            const toast = document.getElementById('toast-notification');
+            document.getElementById('toast-title').innerText = title;
+            document.getElementById('toast-message').innerText = message;
+
+            toast.classList.remove('translate-y-32', 'opacity-0');
+            setTimeout(() => {
+                toast.classList.add('translate-y-32', 'opacity-0');
+            }, 3500);
+        }
+    </script>
+</body>
+</html>
+```
